@@ -45,4 +45,4 @@ jobs:
       - name: Deploy with env variables
         run: |
           source env_vars.sh
-          deployctl deploy --project="artpani-tutor-manager-ad" --entrypoint="./source/main.ts" --prod
+          deployctl deploy --project="artpani-tutor-manager-ad" --entrypoint="./source/main.ts" --prod --token="${{ secrets.DENO_DEPLOY_TOKEN }}"
