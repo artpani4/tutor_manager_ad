@@ -32,10 +32,20 @@ jobs:
           GUARDEN_CURRENT_ENV: prod
           GUARDEN_CURRENT_PROJECT: tutor_manager_ad
 
+      - name: Output env_vars.sh content
+        run: |
+          echo "Содержимое файла env_vars.sh:"
+          cat env_vars.sh
+
       - name: Load environment variables
         run: |
           source env_vars.sh
           echo "Загружены переменные окружения для деплоя."
+
+      - name: Verify environment variables before deploy
+        run: |
+          echo "Текущие переменные окружения:"
+          env
 
       - name: Upload to Deno Deploy
         uses: denoland/deployctl@v1
