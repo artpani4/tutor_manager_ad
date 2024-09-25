@@ -42,7 +42,6 @@ jobs:
       - name: Install deployctl
         run: deno install -Arf --no-check -n deployctl jsr:@deno/deployctl
 
-      - name: Deploy with env variables
+      - name: Deploy to Deno Deploy
         run: |
-          source env_vars.sh
           deployctl deploy --project="artpani-tutor-manager-ad" --entrypoint="./source/main.ts" --prod --token="${{ secrets.DENO_DEPLOY_TOKEN }}"
