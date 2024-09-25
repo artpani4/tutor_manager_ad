@@ -2,9 +2,7 @@ import Tuner from "jsr:@artpani/tuner";
 
 const baseCfg = Tuner.tune({
   env: {
-    GUARDEN_TOKEN: Tuner.Env.getString.orThrow(
-      new Error("Missing GUARDEN_TOKEN!"),
-    ),
+    GUARDEN_TOKEN: Tuner.Env.getString.orNothing(),
     TG_BOT_TOKEN: Tuner.Env.getString.orThrow(
       new Error("Missing TG_BOT_TOKEN!"),
     ),
