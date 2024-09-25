@@ -25,7 +25,7 @@ jobs:
 
 
       - name: Deploy and Run Project
-        run: guarden run deno task dev
+        run: guarden run deno task prod
         env:
           CONFIG: prod
           GUARDEN_TOKEN: ${{ secrets.GUARDEN_TOKEN }}
