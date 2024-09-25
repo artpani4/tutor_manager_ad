@@ -1,0 +1,36 @@
+name: Deploy Guarden
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Deno
+        uses: denoland/setup-deno@v1
+        with:
+          deno-version: v1.x
+
+      - name: Install Guarden CLI
+        run: deno install -f -A --unstable --import-map=https://raw.githubusercontent.com/artpani4/guarden/refs/heads/main/source/client/cli.ts guarden
+
+
+      - name: Run Guarden
+        run: guarden run deno task dev
+
+      - name: Deploy to Deno Deploy
+        uses: denoland/deployctl-action@v1
+        with:
+          project: your-deno-project
+          token: ${{ secrets.DENO_DEPLOY_TOKEN }}
