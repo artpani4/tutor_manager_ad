@@ -2,8 +2,9 @@
   "lock": false,
   "tasks": {
     "development": "deno run --watch  --allow-all ./source/main.ts",
-    "production": "deno run --allow-all ./main.ts",
+    "production": "deno run --allow-all  ./source/main.ts",
     "dev": "guarden run deno task development",
+    "prod": "guarden run deno task production",
     "setWebhook": " deno run  -A --unstable ./source/bot/setWebhook.ts",
     "webhook": "guarden run deno task setWebhook"
   },
