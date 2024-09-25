@@ -39,9 +39,10 @@ jobs:
           echo "Loaded environment variables:"
           env
 
-      - name: Install deployctl
-        run: deno install -Arf --no-check -n deployctl jsr:@deno/deployctl
-
       - name: Deploy to Deno Deploy
-        run: |
-          deployctl deploy --project="artpani-tutor-manager-ad" --entrypoint="./source/main.ts" --prod --token="${{ secrets.DENO_DEPLOY_TOKEN }}"
+        uses: denoland/deployctl@v1
+        with:
+          project: "artpani-tutor-manager-ad"
+          entrypoint: "./source/main.ts"
+          token: ${{ secrets.DENO_DEPLOY_TOKEN }}
+          env-file: env_vars.sh
