@@ -21,12 +21,13 @@ jobs:
           deno-version: v1.x
 
       - name: Install Guarden CLI
-        run: deno install -Arf https://raw.githubusercontent.com/artpani4/guarden/refs/heads/main/source/client/cli.ts
+        run: deno install --allow-all -n guarden https://raw.githubusercontent.com/artpani4/guarden/refs/heads/main/source/client/cli.ts
 
 
       - name: Deploy and Run Project
         run: guarden run deno task dev
         env:
+          CONFIG: prod
           GUARDEN_TOKEN: ${{ secrets.GUARDEN_TOKEN }}
           GUARDEN_CURRENT_ENV: prod
           GUARDEN_CURRENT_PROJECT: tutor_manager_ad
