@@ -34,6 +34,7 @@ jobs:
         run: deno install -Af -n deployctl https://deno.land/x/deploy/deployctl.ts
 
       - name: Deploy to Deno Deploy
-        run: deployctl deploy --project=my-deno-project --prod
+        run: deployctl deploy --project=artpani-tutor-manager-ad --prod
         env:
           DENO_DEPLOY_TOKEN: ${{ secrets.DENO_DEPLOY_TOKEN }}
+          CONFIG: prod
