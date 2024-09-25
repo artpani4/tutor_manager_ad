@@ -26,9 +26,7 @@ jobs:
 
       - name: Fetch and Set Secrets
         run: |
-          guarden fetch-set
-          # Сохраняем все переменные окружения в файл
-          export -p > env_vars.sh
+          guarden fetch-set --export env_vars.sh
         env:
           GUARDEN_TOKEN: ${{ secrets.GUARDEN_TOKEN }}
           GUARDEN_CURRENT_ENV: prod
@@ -38,11 +36,9 @@ jobs:
         run: |
           source env_vars.sh
           echo "Загружены переменные окружения для деплоя."
-      
+
       - name: Upload to Deno Deploy
         uses: denoland/deployctl@v1
         with:
           project: "artpani-tutor-manager-ad"
           entrypoint: "./source/main.ts"
-        env:
-          GUARDEN_TOKEN: ${{ secrets.GUARDEN_TOKEN }}
