@@ -5,8 +5,8 @@ on:
     branches: ["main"]
 
 permissions:
-    id-token: write  # Needed for auth with Deno Deploy
-    contents: read   # Needed to clone the repository
+  id-token: write  # Needed for auth with Deno Deploy
+  contents: read   # Needed to clone the repository
 
 jobs:
   deploy:
@@ -24,14 +24,18 @@ jobs:
       - name: Install Guarden CLI
         run: deno install --allow-all -n guarden https://raw.githubusercontent.com/artpani4/guarden/refs/heads/main/source/client/cli.ts
 
-      - name: Fetch secrets and deploy
+      - name: Fetch and export secrets
         run: |
           guarden fetch-set --export env_vars.sh
-          source env_vars.sh
-          echo "Загружены переменные окружения для деплоя:"
-          env
-          deployctl deploy --project="artpani-tutor-manager-ad" --prod --entrypoint="./source/main.ts"
+          echo "Secrets fetched and saved to env_vars.sh"
         env:
           GUARDEN_TOKEN: ${{ secrets.GUARDEN_TOKEN }}
           GUARDEN_CURRENT_ENV: prod
           GUARDEN_CURRENT_PROJECT: tutor_manager_ad
+
+      - name: Deploy with env variables
+        run: |
+          source env_vars.sh
+          echo "Loaded environment variables:"
+          env
+          deployctl deploy --project="artpani-tutor-manager-ad" --entrypoint="./source/main.ts" --prod --env-file=env_vars.sh
