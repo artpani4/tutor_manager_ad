@@ -1,9 +1,7 @@
-name: Deploy Guarden
+name: Deploy and Run with Guarden
 
 on:
   push:
-    branches: ["main"]
-  pull_request:
     branches: ["main"]
 
 permissions:
@@ -23,14 +21,12 @@ jobs:
           deno-version: v1.x
 
       - name: Install Guarden CLI
-        run: deno install -f -A --unstable --import-map=https://raw.githubusercontent.com/artpani4/guarden/refs/heads/main/source/client/cli.ts guarden
+        run: deno install -Arf https://raw.githubusercontent.com/artpani4/guarden/refs/heads/main/source/client/cli.ts
 
 
-      - name: Run Guarden
+      - name: Deploy and Run Project
         run: guarden run deno task dev
-
-      - name: Deploy to Deno Deploy
-        uses: denoland/deployctl-action@v1
-        with:
-          project: your-deno-project
-          token: ${{ secrets.DENO_DEPLOY_TOKEN }}
+        env:
+          GUARDEN_TOKEN: ${{ secrets.GUARDEN_TOKEN }}
+          GUARDEN_CURRENT_ENV: prod
+          GUARDEN_CURRENT_PROJECT: tutor_manager_ad
