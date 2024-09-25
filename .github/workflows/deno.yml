@@ -25,15 +25,25 @@ jobs:
         run: deno install --allow-all -n guarden https://raw.githubusercontent.com/artpani4/guarden/refs/heads/main/source/client/cli.ts
 
       - name: Fetch and Set Secrets
-        run: guarden fetch-set
+        run: |
+          guarden fetch-set
+          # Экспортируем все переменные окружения в файл
+          printenv | grep -E 'TG_BOT_TOKEN|SUPABASE_' > $GITHUB_ENV
         env:
           GUARDEN_TOKEN: ${{ secrets.GUARDEN_TOKEN }}
           GUARDEN_CURRENT_ENV: prod
           GUARDEN_CURRENT_PROJECT: tutor_manager_ad
-
 
       - name: Upload to Deno Deploy
         uses: denoland/deployctl@v1
         with:
           project: "artpani-tutor-manager-ad"
           entrypoint: "./source/main.ts"
+        env:
+          GUARDEN_TOKEN: ${{ env.GUARDEN_TOKEN }}
+          GUARDEN_CURRENT_ENV: ${{ env.GUARDEN_CURRENT_ENV }}
+          GUARDEN_CURRENT_PROJECT: ${{ env.GUARDEN_CURRENT_PROJECT }}
+          TG_BOT_TOKEN: ${{ env.TG_BOT_TOKEN }}  # Экспортируемые переменные
+          SUPABASE_API_URL: ${{ env.SUPABASE_API_URL }}
+          SUPABASE_API_TOKEN: ${{ env.SUPABASE_API_TOKEN }}
+          SUPABASE_SCHEMA: ${{ env.SUPABASE_SCHEMA }}
