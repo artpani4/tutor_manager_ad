@@ -1,4 +1,4 @@
-name: Deploy and Run with Guarden
+name: Deploy with Guarden and Deno Deploy
 
 on:
   push:
@@ -23,11 +23,17 @@ jobs:
       - name: Install Guarden CLI
         run: deno install --allow-all -n guarden https://raw.githubusercontent.com/artpani4/guarden/refs/heads/main/source/client/cli.ts
 
-
-      - name: Deploy and Run Project
-        run: guarden run deno task prod
+      - name: Fetch and Set Secrets
+        run: guarden fetch-set
         env:
-          CONFIG: prod
           GUARDEN_TOKEN: ${{ secrets.GUARDEN_TOKEN }}
           GUARDEN_CURRENT_ENV: prod
           GUARDEN_CURRENT_PROJECT: tutor_manager_ad
+
+      - name: Install deployctl (Deno Deploy CLI)
+        run: deno install -Af -n deployctl https://deno.land/x/deploy/deployctl.ts
+
+      - name: Deploy to Deno Deploy
+        run: deployctl deploy --project=my-deno-project --prod
+        env:
+          DENO_DEPLOY_TOKEN: ${{ secrets.DENO_DEPLOY_TOKEN }}
