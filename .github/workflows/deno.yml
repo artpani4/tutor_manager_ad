@@ -5,8 +5,8 @@ on:
     branches: ["main"]
 
 permissions:
-    id-token: write # Needed for auth with Deno Deploy
-    contents: read # Needed to clone the repository
+    id-token: write  # Needed for auth with Deno Deploy
+    contents: read   # Needed to clone the repository
 
 jobs:
   deploy:
@@ -27,23 +27,22 @@ jobs:
       - name: Fetch and Set Secrets
         run: |
           guarden fetch-set
-          # Экспортируем все переменные окружения в файл
-          printenv | grep -E 'TG_BOT_TOKEN|SUPABASE_' > $GITHUB_ENV
+          # Сохраняем все переменные окружения в файл
+          export -p > env_vars.sh
         env:
           GUARDEN_TOKEN: ${{ secrets.GUARDEN_TOKEN }}
           GUARDEN_CURRENT_ENV: prod
           GUARDEN_CURRENT_PROJECT: tutor_manager_ad
 
+      - name: Load environment variables
+        run: |
+          source env_vars.sh
+          echo "Загружены переменные окружения для деплоя."
+      
       - name: Upload to Deno Deploy
         uses: denoland/deployctl@v1
         with:
           project: "artpani-tutor-manager-ad"
           entrypoint: "./source/main.ts"
         env:
-          GUARDEN_TOKEN: ${{ env.GUARDEN_TOKEN }}
-          GUARDEN_CURRENT_ENV: ${{ env.GUARDEN_CURRENT_ENV }}
-          GUARDEN_CURRENT_PROJECT: ${{ env.GUARDEN_CURRENT_PROJECT }}
-          TG_BOT_TOKEN: ${{ env.TG_BOT_TOKEN }}  # Экспортируемые переменные
-          SUPABASE_API_URL: ${{ env.SUPABASE_API_URL }}
-          SUPABASE_API_TOKEN: ${{ env.SUPABASE_API_TOKEN }}
-          SUPABASE_SCHEMA: ${{ env.SUPABASE_SCHEMA }}
+          GUARDEN_TOKEN: ${{ secrets.GUARDEN_TOKEN }}
