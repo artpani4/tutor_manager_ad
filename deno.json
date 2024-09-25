@@ -1,0 +1,21 @@
+{
+  "lock": false,
+  "tasks": {
+    "development": "deno run --watch  --allow-all ./source/main.ts",
+    "production": "deno run --allow-all ./main.ts",
+    "dev": "guarden run deno task development",
+    "setWebhook": " deno run  -A --unstable ./source/bot/setWebhook.ts",
+    "webhook": "guarden run deno task setWebhook"
+  },
+  "imports": {
+    "@artpani/tuner": "jsr:@artpani/tuner@^0.4.3",
+    "$grammy": "https://deno.land/x/grammy@v1.30.0/mod.ts",
+    "$supabase": "https://esm.sh/@supabase/supabase-js@2.45.4",
+    "$luminous": "https://deno.land/x/luminous@0.1.6/mod.ts",
+    "$share": "./source/share.ts",
+    "$db": "./source/db/supabase/mod.ts",
+    "$bot": "./bot/mod.ts",
+    "$config": "./config.ts",
+    "@hono": "jsr:@hono/hono@^4.6.0"
+  }
+}
