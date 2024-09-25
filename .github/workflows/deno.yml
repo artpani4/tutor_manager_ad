@@ -25,24 +25,15 @@ jobs:
         run: deno install --allow-all -n guarden https://raw.githubusercontent.com/artpani4/guarden/main/source/client/cli.ts
 
       - name: Fetch and Set Secrets
-        run: |
-          guarden fetch-set --export env_vars.sh
-          # Чтение переменных из файла и добавление их в GITHUB_ENV
-          while IFS= read -r line; do
-            echo "$line" >> $GITHUB_ENV
-          done < env_vars.sh
+        run: guarden fetch-set --export env_vars.sh
         env:
           GUARDEN_TOKEN: ${{ secrets.GUARDEN_TOKEN }}
           GUARDEN_CURRENT_ENV: prod
           GUARDEN_CURRENT_PROJECT: tutor_manager_ad
-
-      - name: Verify environment variables
-        run: |
-          echo "Текущие переменные окружения:"
-          env
 
       - name: Upload to Deno Deploy
         uses: denoland/deployctl@v1
         with:
           project: "artpani-tutor-manager-ad"
           entrypoint: "./source/main.ts"
+          args: --env-file=env_vars.sh
