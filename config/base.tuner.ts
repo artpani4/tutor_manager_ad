@@ -4,7 +4,11 @@ const baseCfg = Tuner.tune({
   env: {
     GUARDEN_TOKEN: Tuner.Env.getString.orNothing(),
     TG_BOT_TOKEN: Tuner.Env.getString.orThrow(
-      new Error("Missing TG_BOT_TOKEN!"),
+      new Error(
+        `Missing TG_BOT_TOKEN! Envs: ${
+          JSON.stringify(Deno.env.toObject(), null, 2)
+        }`,
+      ),
     ),
     SUPABASE_API_URL: Tuner.Env.getString.orThrow(
       new Error("Missing SUPABASE_API_URL!"),
